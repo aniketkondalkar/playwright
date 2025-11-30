@@ -63,7 +63,7 @@ test('UI Controls', async ({page}) =>
 }
 )
 
-test.only('Handle child window', async ({browser}) =>
+test('Handle child window', async ({browser}) =>
 {
   const context= await browser.newContext();
   const page =await context.newPage();
@@ -82,7 +82,7 @@ test.only('Handle child window', async ({browser}) =>
   const domain=arrayText[1].split(" ")[0];
   console.log(domain);
   await page.locator("[name='username']").fill(domain);
-  await page.pause();
+  //await page.pause();
 
   
 
