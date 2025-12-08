@@ -4,8 +4,9 @@ test('Search Product dynamically',async ({page})=>
 {
 const productName = "ADIDAS ORIGINAL";
 const products =page.locator(".card-body");
+const email = "kondalkar@gmail.com"
 await page.goto("https://rahulshettyacademy.com/client/#/auth/login");
-await page.locator("[type='email']").fill("kondalkar@gmail.com");
+await page.locator("[type='email']").fill(email);
 await page.locator("[type='password']").fill("Aniket@123");
 await page.locator("input#login").click();
 
@@ -46,7 +47,29 @@ for (let i=0; i<countryCount ; ++i)
     break;
  }
 }
-await page.pause();
+await expect(page.locator(".user__name label")).toHaveText(email);
+await page.locator(".action__submit").click();
+
+await expect(page.locator(".hero-primary")).toHaveText(" Thankyou for the order. ");
+const orderid = await page.locator(".em-spacer-1 .ng-star-inserted").textContent();
+console.log(orderid);
+
+await page.locator("button[routerlink*='myorders']").click();
+await page.locator("tbody").waitFor();
+
+const rows = await page.locator("tbody tr");
+
+for(let i=0 ; i< await rows.count() ; ++i)
+{
+const rowOrderID = await rows.nth(i).locator("th").textContent();
+if (orderid.includes(rowOrderID))
+{
+    await  rows.nth(i).locator("button").first().click();
+    break;
+}
+}
+const OrderIDDetails = await page.locator(".col-text").textContent();
+expect(orderid.includes(OrderIDDetails)).toBeTruthy();
 
 }
 )
